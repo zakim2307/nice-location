@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { LocationController as AppController } from './location.controller';
+import { LocationService } from './location.service';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -8,15 +8,17 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [LocationService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "locations"', () => {
+      expect(appController.listLocations()).toMatchObject({
+        locations: ['Belgaum', 'Banglaore', 'bangladesh', 'honda'],
+      });
     });
   });
 });

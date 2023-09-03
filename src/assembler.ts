@@ -1,8 +1,8 @@
-import { AppService } from './app.service';
-import { AppController } from './app.controller';
+import { LocationController } from './location/location.controller';
+import { LocationService } from './location/location.service';
 
-const appService = new AppService();
-const appController = new AppController(appService);
-const hello = appController.getHello();
+const locationService = new LocationService();
+const locationController = new LocationController(locationService);
+const hello = locationController.listLocations();
 
 console.log(hello);

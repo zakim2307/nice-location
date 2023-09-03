@@ -1,16 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { resolve } from 'path';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from './config/config.service';
 
 async function bootstrap() {
-  const APP_DIRECTORY = resolve(__dirname, '../');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.setGlobalPrefix('api/v1');
+
   app.setViewEngine('hbs');
-  app.setBaseViewsDir(resolve(APP_DIRECTORY, 'views'));
-  app.useStaticAssets(resolve(APP_DIRECTORY, 'public'));
+  const configModule = app.get(ConfigService);
+  const viewsDirectory = configModule.get<string>('templates.path');
+  const publicDirectory = configModule.get<string>('public.path');
+  app.setBaseViewsDir(viewsDirectory);
+  app.useStaticAssets(publicDirectory);
+  app.setGlobalPrefix('api/v1');
 
   const config = new DocumentBuilder()
     .setTitle('Home mantiqh')
